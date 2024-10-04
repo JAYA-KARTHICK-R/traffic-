@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Alerts</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #212529;
+            padding: 30px;
+            color: #ffffff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar a {
+            color: #adb5bd;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            transition: color 0.3s, background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+            background-color: #17a2b8;
+        }
+
+        .main-content {
+            width: 80%;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .filter select,
+        .alert-input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        .alerts-container {
+            max-height: 50vh;
+            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .alert-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .alert-message {
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .alert-time {
+            font-size: 12px;
+            color: #aaa;
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+        }
+
+        .alert.high {
+            border-left: 5px solid red;
+        }
+
+        .alert.medium {
+            border-left: 5px solid orange;
+        }
+
+        .alert.low {
+            border-left: 5px solid green;
+        }
+
+        .acknowledge-button {
+            background-color: #17a2b8;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 5px;
+            right: 80px;
+            transition: background-color 0.3s;
+        }
+
+        .acknowledge-button:hover {
+            background-color: #138496;
+        }
+
+        .alert-input {
+            width: 60%;
+        }
+
+        .notification {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* Automatic Alert Section */
+        .automatic-alert {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="D:\221501507\trafficUI\public\Dashboard Overview.html"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+                <li><a href="D:\221501507\trafficUI\public\Traffic Control Panel .html"><i class="fas fa-traffic-light"></i> Traffic Control Panel</a></li>
+                <li><a href="D:\221501507\trafficUI\public\Analytics & Reports .html"><i class="fas fa-chart-line"></i> Analytics & Reports</a></li>
+                <li><a href="D:/221501507/trafficUI/public/System Alerts.html"><i class="fas fa-exclamation-circle"></i> System Alerts</a></li>
+            </ul>
+            <footer style="text-align: center;">
+                <p><a href="D:\221501507\trafficUI\public\index.html">© 2024 INTELINK</a></p>
+            </footer>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- System Alerts -->
+            <section id="alerts">
+                <h2>System Alerts</h2>
+
+                <!-- Notification Banner -->
+                <div class="notification" id="notification" style="display: none;">New alerts added!</div>
+
+                <!-- Filter -->
+                <div class="filter">
+                    <label for="alert-filter">Filter Alerts:</label>
+                    <select id="alert-filter" onchange="filterAlerts()">
+                        <option value="all">All</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+
+                <!-- Add Alert Form -->
+                <div class="filter">
+                    <input type="text" id="alert-title" class="alert-input" placeholder="Alert Title" />
+                    <input type="text" id="alert-message" class="alert-input" placeholder="Alert Message" />
+                    <select id="alert-severity" class="alert-input">
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <button onclick="addAlert()">Add Alert</button>
+                </div>
+
+                <!-- Alerts List -->
+                <div class="alerts-container" id="alerts-container">
+                    <div class="alert high">
+                        <span class="alert-title">Traffic Light Malfunction</span>
+                        <p class="alert-message">Intersection 3 traffic light has malfunctioned. Maintenance team has been notified.</p>
+                        <span class="alert-time">2024-09-12 10:15 AM</span>
+                        <button class="acknowledge-button" onclick="acknowledgeAlert(this)">Acknowledge</button>
+                    </div>
+
+                    <div class="alert medium">
+                        <span class="alert-title">High Traffic Volume</span>
+                        <p class="alert-message">High traffic volume detected at Intersection 1. Traffic management adjustments are in progress.</p>
+                        <span class="alert-time">2024-09-12 09:45 AM</span>
+                        <button class="acknowledge-button" onclick="acknowledgeAlert(this)">Acknowledge</button>
+                    </div>
+
+                    <div class="alert low">
+                        <span class="alert-title">Normal Traffic Conditions</span>
+                        <p class="alert-message">Traffic conditions are normal at all intersections.</p>
+                        <span class="alert-time">2024-09-12 09:00 AM</span>
+                        <button class="acknowledge-button" onclick="acknowledgeAlert(this)">Acknowledge</button>
+                    </div>
+
+                    <!-- Add more alerts as needed -->
+                </div>
+
+                <!-- Automatic Alerts Section -->
+                <h3>Automatic Alerts</h3>
+                <div class="alerts-container" id="automatic-alerts-container"></div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        function filterAlerts() {
+            const filter = document.getElementById('alert-filter').value;
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                if (filter === 'all' || alert.classList.contains(filter)) {
+                    alert.style.display = 'block';
+                } else {
+                    alert.style.display = 'none';
+                }
+            });
+        }
+
+        function addAlert() {
+            const title = document.getElementById('alert-title').value;
+            const message = document.getElementById('alert-message').value;
+            const severity = document.getElementById('alert-severity').value;
+
+            if (title && message) {
+                const alertsContainer = document.getElementById('alerts-container');
+
+                // Create a new alert element
+                const newAlert = document.createElement('div');
+                newAlert.classList.add('alert', severity);
+                newAlert.innerHTML = `
+                    <span class="alert-title">${title}</span>
+                    <p class="alert-message">${message}</p>
+                    <span class="alert-time">${new Date().toLocaleString()}</span>
+                    <button class="acknowledge-button" onclick="acknowledgeAlert(this)">Acknowledge</button>
+                `;
+
+                // Add the new alert to the container
+                alertsContainer.prepend(newAlert); // Add to the top
+                document.getElementById('notification').style.display = 'block'; // Show notification banner
+                setTimeout(() => {
+                    document.getElementById('notification').style.display = 'none';
+                }, 3000); // Hide after 3 seconds
+
+                // Clear input fields
+                document.getElementById('alert-title').value = '';
+                document.getElementById('alert-message').value = '';
+            } else {
+                alert('Please fill in both the title and message.');
+            }
+        }
+
+        function acknowledgeAlert(button) {
+            const alert = button.parentElement;
+            alert.style.textDecoration = 'line-through'; // Mark as read
+            alert.style.opacity = '0.5'; // Make it look faded
+        }
+
+        // Automatic Alert Generation
+        const automaticAlerts = [
+            "Maintenance required for Intersection 5 traffic lights.",
+            "Road construction ongoing at Main Street.",
+            "Weather conditions may affect traffic patterns.",
+            "Traffic congestion expected at Peak Hours.",
+            "Accident reported at Intersection 2."
+        ];
+
+        function generateAutomaticAlert() {
+            const alertsContainer = document.getElementById('automatic-alerts-container');
+            const randomIndex = Math.floor(Math.random() * automaticAlerts.length);
+            const alertMessage = automaticAlerts[randomIndex];
+
+            const newAlert = document.createElement('div');
+            newAlert.classList.add('automatic-alert');
+            newAlert.innerHTML = `<p>${alertMessage}</p><span class="alert-time">${new Date().toLocaleString()}</span>`;
+            alertsContainer.prepend(newAlert); // Add to the top
+
+            // Automatically remove the alert after 10 seconds
+            setTimeout(() => {
+                alertsContainer.removeChild(newAlert);
+            }, 10000);
+        }
+
+        // Generate an automatic alert every 5 seconds
+        setInterval(generateAutomaticAlert, 5000);
+    </script>
+</body>
+</html>

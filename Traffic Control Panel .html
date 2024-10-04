@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Control Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #212529;
+            padding: 30px;
+            color: #ffffff;
+            position: relative;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar a {
+            color: #adb5bd;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            transition: color 0.3s, background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+            background-color: #17a2b8;
+        }
+
+        .main-content {
+            width: 80%;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .intersection {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .intersection:hover {
+            transform: translateY(-5px);
+        }
+
+        .lights {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .light {
+            width: 50px;
+            height: 150px;
+            border: 3px solid #333;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .light div {
+            width: 100%;
+            height: 30px;
+            border-radius: 5px;
+            transition: opacity 0.5s, transform 0.5s; /* Smooth transition */
+            opacity: 0.3; /* Initially dim */
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .active {
+            opacity: 1; /* Full brightness when active */
+            transform: scale(1.2); /* Slightly enlarge when active */
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #17a2b8;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            position: relative;
+        }
+
+        button:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        .reset-button {
+            background-color: #dc3545;
+        }
+
+        .reset-button:hover {
+            background-color: #c82333;
+        }
+
+        .emergency-button {
+            background-color: #ffc107;
+        }
+
+        .emergency-button:hover {
+            background-color: #e0a800;
+        }
+
+        .timer {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+
+        .traffic-volume {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        .mode-toggle {
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .main-content {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="D:\221501507\trafficUI\public\Dashboard Overview.html"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+                <li><a href="D:\221501507\trafficUI\public\Traffic Control Panel .html"><i class="fas fa-traffic-light"></i> Traffic Control Panel</a></li>
+                <li><a href="D:\221501507\trafficUI\public\Analytics & Reports .html"><i class="fas fa-chart-line"></i> Analytics & Reports</a></li>
+                <li><a href="D:/221501507/trafficUI/public/System Alerts.html"><i class="fas fa-exclamation-circle"></i> System Alerts</a></li>
+            </ul>
+            <footer style="text-align: center;">
+                <p><a href="D:\221501507\trafficUI\public\index.html">© 2024 INTELINK</a></p>
+            </footer>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Traffic Control Panel -->
+            <section id="control-panel">
+                <h2>Traffic Control Panel</h2>
+                <div class="mode-toggle">
+                    <button id="toggle-mode" onclick="toggleMode()">Toggle Dark/Light Mode</button>
+                </div>
+                <div class="timer">
+                    <strong>Automatic Cycle Timer:</strong> <span id="cycle-timer">15</span> seconds
+                </div>
+                
+                <div class="control-panel">
+                    <div class="intersection">
+                        <h3>Intersection 1</h3>
+                        <div class="lights">
+                            <div class="light">
+                                <div id="intersection1-red" class="red"></div>
+                                <div id="intersection1-yellow" class="yellow"></div>
+                                <div id="intersection1-green" class="green"></div>
+                            </div>
+                        </div>
+                        <button onclick="toggleLight('intersection1', 'red')">Red Light</button>
+                        <button onclick="toggleLight('intersection1', 'green')">Green Light</button>
+                        <button onclick="toggleLight('intersection1', 'yellow')">Yellow Light</button>
+                        <p>Status: <span id="intersection1-status">Red</span></p>
+                        <p class="traffic-volume">Traffic Volume: <span id="intersection1-volume">Low</span></p>
+                    </div>
+                    <div class="intersection">
+                        <h3>Intersection 2</h3>
+                        <div class="lights">
+                            <div class="light">
+                                <div id="intersection2-red" class="red"></div>
+                                <div id="intersection2-yellow" class="yellow"></div>
+                                <div id="intersection2-green" class="green"></div>
+                            </div>
+                        </div>
+                        <button onclick="toggleLight('intersection2', 'red')">Red Light</button>
+                        <button onclick="toggleLight('intersection2', 'green')">Green Light</button>
+                        <button onclick="toggleLight('intersection2', 'yellow')">Yellow Light</button>
+                        <p>Status: <span id="intersection2-status">Red</span></p>
+                        <p class="traffic-volume">Traffic Volume: <span id="intersection2-volume">Low</span></p>
+                    </div>
+                    <div class="intersection">
+                        <h3>Intersection 3</h3>
+                        <div class="lights">
+                            <div class="light">
+                                <div id="intersection3-red" class="red"></div>
+                                <div id="intersection3-yellow" class="yellow"></div>
+                                <div id="intersection3-green" class="green"></div>
+                            </div>
+                        </div>
+                        <button onclick="toggleLight('intersection3', 'red')">Red Light</button>
+                        <button onclick="toggleLight('intersection3', 'green')">Green Light</button>
+                        <button onclick="toggleLight('intersection3', 'yellow')">Yellow Light</button>
+                        <p>Status: <span id="intersection3-status">Red</span></p>
+                        <p class="traffic-volume">Traffic Volume: <span id="intersection3-volume">Low</span></p>
+                    </div>
+                    <button class="emergency-button" onclick="emergencyOverride()">Emergency Override</button>
+                    <button class="reset-button" onclick="resetLights()">Reset All Lights</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        let currentLight = {
+            intersection1: 'red',
+            intersection2: 'red',
+            intersection3: 'red',
+        };
+
+        function toggleLight(intersection, color) {
+            // Reset lights
+            document.getElementById(`${intersection}-red`).classList.remove('active');
+            document.getElementById(`${intersection}-yellow`).classList.remove('active');
+            document.getElementById(`${intersection}-green`).classList.remove('active');
+
+            // Set the active light
+            document.getElementById(`${intersection}-${color}`).classList.add('active');
+            currentLight[intersection] = color.charAt(0).toUpperCase() + color.slice(1);
+            document.getElementById(`${intersection}-status`).innerText = currentLight[intersection];
+
+            // Update traffic volume based on the active light
+            let volume = (color === 'green') ? 'High' : (color === 'yellow') ? 'Medium' : 'Low';
+            document.getElementById(`${intersection}-volume`).innerText = volume;
+        }
+
+        function resetLights() {
+            Object.keys(currentLight).forEach(intersection => {
+                toggleLight(intersection, 'red'); // Reset to red
+            });
+        }
+
+        function emergencyOverride() {
+            resetLights();
+            Object.keys(currentLight).forEach(intersection => {
+                toggleLight(intersection, 'red'); // Ensure all are red
+            });
+            alert("Emergency mode activated! All lights are now red.");
+        }
+
+        function toggleMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                body.style.backgroundColor = '#333';
+                body.style.color = '#ffffff';
+            } else {
+                body.style.backgroundColor = '';
+                body.style.color = '#000';
+            }
+        }
+
+        // Automatic cycle timer
+        let cycleTime = 15; // in seconds
+        setInterval(() => {
+            cycleTime--;
+            document.getElementById('cycle-timer').innerText = cycleTime;
+
+            if (cycleTime <= 0) {
+                // Logic for cycling through lights automatically can go here
+                cycleTime = 15; // Reset timer
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

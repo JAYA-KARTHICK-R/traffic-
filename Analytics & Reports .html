@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics & Reports</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Navigation</h2>
+            <ul>
+                <li><a href="D:\221501507\trafficUI\public\Dashboard Overview.html"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+                <li><a href="D:\221501507\trafficUI\public\Traffic Control Panel .html"><i class="fas fa-traffic-light"></i> Traffic Control Panel</a></li>
+                <li><a href="D:\221501507\trafficUI\public\Analytics & Reports .html"><i class="fas fa-chart-line"></i> Analytics & Reports</a></li>
+                <li><a href="D:/221501507/trafficUI/public/System Alerts.html"><i class="fas fa-exclamation-circle"></i> System Alerts</a></li>
+            </ul>
+            <footer>
+                <p><a href="D:\221501507\trafficUI\public\index.html">© 2024 INTELINK</a>
+                </p>
+            </footer>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Analytics & Reports -->
+            <section id="analytics">
+                <h2>Analytics & Reports</h2>
+
+                <div class="chart-container">
+                    <h3>Traffic Volume</h3>
+                    <canvas id="trafficVolumeChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Average Waiting Time</h3>
+                    <canvas id="waitingTimeChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Peak Traffic Hours</h3>
+                    <canvas id="peakHoursChart"></canvas>
+                </div>
+
+                <div class="data-summary">
+                    <h3>Summary Data</h3>
+                    <div class="summary-card">
+                        <h4>Total Vehicles:</h4>
+                        <p id="totalVehicles">470</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Average Wait Time:</h4>
+                        <p id="avgWaitTime">9 mins</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Peak Hours:</h4>
+                        <p id="peakHours">12:00-18:00</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Traffic Volume Chart
+        const trafficVolumeCtx = document.getElementById('trafficVolumeChart').getContext('2d');
+        new Chart(trafficVolumeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Intersection 1', 'Intersection 2', 'Intersection 3', 'Intersection 4'],
+                datasets: [{
+                    label: 'Traffic Volume',
+                    data: [120, 150, 180, 160], // Replace with real data
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutBounce'
+                }
+            }
+        });
+
+        // Average Waiting Time Chart
+        const waitingTimeCtx = document.getElementById('waitingTimeChart').getContext('2d');
+        new Chart(waitingTimeCtx, {
+            type: 'line',
+            data: {
+                labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
+                datasets: [{
+                    label: 'Average Waiting Time (minutes)',
+                    data: [5, 10, 15, 8], // Replace with real data
+                    backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutBounce'
+                }
+            }
+        });
+
+        // Peak Traffic Hours Chart
+        const peakHoursCtx = document.getElementById('peakHoursChart').getContext('2d');
+        new Chart(peakHoursCtx, {
+            type: 'pie',
+            data: {
+                labels: ['00:00-06:00', '06:00-12:00', '12:00-18:00', '18:00-24:00'],
+                datasets: [{
+                    label: 'Traffic Distribution',
+                    data: [10, 30, 40, 20], // Replace with real data
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutBounce'
+                }
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .sidebar {
+            background: #343a40;
+            color: #fff;
+            width: 250px;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .sidebar h2 {
+            color: #fff;
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+
+        .sidebar ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .sidebar ul li a:hover {
+            color: #17a2b8;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            width: calc(100% - 260px);
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .chart-container {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .data-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .summary-card {
+            background: #17a2b8;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 30%;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        a{
+            text-decoration: none;
+            color: #f8f9fa;
+        }
+
+        .summary-card:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</body>
+
+</html>
